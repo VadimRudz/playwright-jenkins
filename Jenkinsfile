@@ -1,11 +1,10 @@
 pipeline {
-    agent {
-        docker {
-            image 'mcr.microsoft.com/playwright:v1.42.1-jammy'
-            args '--ipc=host'
-        }
+    agent any
+
+    tools {
+        nodejs 'NodeJS'
     }
-    
+
     stages {
         stage('Checkout') {
             steps {
@@ -13,23 +12,32 @@ pipeline {
                 url: 'https://github.com/VadimRudz/playwright-jenkins.git'
             }
         }
-        
+
         stage('Install dependencies') {
             steps {
-                sh 'npm install'
+                sh 'npm install @playwright/test'
             }
         }
-        
+
+        stage('Install browsers') {
+            environment {
+                PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = '1'
+            }
+            steps {
+                sh 'npx playwright install --with-deps'
+            }
+        }
+
         stage('Run tests') {
             steps {
                 sh 'npx playwright test'
             }
         }
     }
-    
+
     post {
         always {
-            archiveArtifacts artifacts: 'playwright-report/**/*'
+            archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
             junit 'test-results/**/*.xml'
         }
     }
