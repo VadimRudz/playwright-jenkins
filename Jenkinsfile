@@ -20,12 +20,12 @@ pipeline {
         }
 
         stage('Install browsers') {
-            environment {
-                PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = '1'
-            }
             steps {
-                sh 'npx playwright install --with-deps'
-            }
+                sh '''
+                export PLAYWRIGHT_BROWSERS_PATH=$HOME/.cache/playwright
+                npx playwright install --with-deps
+                '''
+             }
         }
 
         stage('Run tests') {
