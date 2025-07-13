@@ -2,13 +2,20 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'nodejs' // Name from Global Tool Configuration
+        nodejs 'nodejs' // name from Global Tool Configuration
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/VadimRudz/playwright-jenkins.git' // Repository name
+                git 'https://github.com/VadimRudz/playwright-jenkins.git'
+            }
+        }
+
+        // Add browsers
+        stage('Install Playwright browsers') {
+            steps {
+                sh 'npx playwright install --with-deps'
             }
         }
 
@@ -28,7 +35,7 @@ pipeline {
     post {
         always {
             archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
-            junit 'test-results/**/*.xml' // If we need to colelct JUnit reports
+            junit 'test-results/**/*.xml'
         }
     }
 }
