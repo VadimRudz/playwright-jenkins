@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'nodejs' // Название из Global Tool Configuration
+        nodejs 'nodejs' // Name from Global Tool Configuration
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/ваш-репозиторий.git' // Укажите ваш репозиторий
+                git 'https://github.com/VadimRudz/playwright-jenkins.git' // Repository name
             }
         }
 
@@ -28,7 +28,7 @@ pipeline {
     post {
         always {
             archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
-            junit 'test-results/**/*.xml' // Если нужно собирать JUnit отчеты
+            junit 'test-results/**/*.xml' // If we need to colelct JUnit reports
         }
     }
 }
