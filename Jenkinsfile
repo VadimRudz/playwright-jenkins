@@ -21,10 +21,7 @@ pipeline {
 
         stage('Install browsers') {
             steps {
-                sh '''
-                export PLAYWRIGHT_BROWSERS_PATH=$HOME/.cache/playwright
-                npx playwright install --with-deps
-                '''
+                sh 'npx playwright install'
              }
         }
 
