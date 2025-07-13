@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'NodeJS' // name from Global Tool Configuration
+        nodejs 'nodejs'
     }
 
     stages {
@@ -13,16 +13,15 @@ pipeline {
             }
         }
 
-        // Add browsers
-        stage('Install Playwright browsers') {
+        stage('Install dependencies') {
             steps {
-                sh 'npx playwright install --with-deps'
+                sh 'npm install @playwright/test'
             }
         }
 
-        stage('Install dependencies') {
+        stage('Install browsers') {
             steps {
-                sh 'npm install'
+                sh 'npx playwright install --with-deps'
             }
         }
 
