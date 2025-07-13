@@ -13,6 +13,12 @@ pipeline {
             }
         }
 
+        stage('Install Chrome') {
+            steps {
+                sh 'npx playwright install chromium'
+            }
+        }
+
         stage('Install dependencies') {
             steps {
                 sh 'npm install'
@@ -21,14 +27,14 @@ pipeline {
 
         stage('Run tests') {
             steps {
-                sh 'npm test'
+                sh 'npm run test:chrome'
             }
         }
     }
 
     post {
         always {
-            archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'playwright-report/**/*'
             junit 'test-results/**/*.xml'
         }
     }
